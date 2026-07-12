@@ -119,7 +119,7 @@
         };
         legend.addTo(map);
 
-        // 8. Auto-enquadramento automático corrigido e seguro
+        // 8. Auto-enquadramento automático corrigido com margem de segurança fixa
         const grupoRotas = L.featureGroup([linhaIda, linhaVolta]);
         map.fitBounds(grupoRotas.getBounds(), { padding: [40, 40] });
     </script>
