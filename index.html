@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1ª Viagem Missionária de Paulo - Rotas Separadas</title>
+    <title>1ª Viagem Missionária de Paulo - Rotas com Direção</title>
 
     <!-- Links oficiais da CDN do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -54,7 +54,11 @@
 
     <div id="map"></div>
 
+    <!-- Scripts: Leaflet + Plugin de Decoração (Setas) -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-polylineiterator/dist/leaflet.polylineiterator.js"></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator/dist/leaflet.polylinedecorator.js"></script>
+    
     <script>
         const map = L.map('map').setView([36.5, 34.0], 6);
 
@@ -85,6 +89,7 @@
             { name: "Antioquia da Síria (Fim)", coords: [36.2021, 36.1601], desc: "<b>Fim da Viagem:</b> Relatório à igreja local. (Atos 14:26-28)" }
         ];
 
+        // Processamento dos Marcadores com Popups Inteligentes
         const todasAsParadas = [...rotaIda, ...rotaVolta];
         const marcadoresCriados = {};
 
@@ -105,35 +110,49 @@
         const coordsIda = rotaIda.map(p => p.coords);
         const coordsVolta = rotaVolta.map(p => p.coords);
 
+        // Criando as linhas das trajetórias
         const linhaIda = L.polyline(coordsIda, {
             color: '#2980b9',
             weight: 4,
-            opacity: 0.9,
-            dashArray: '8, 8'
+            opacity: 0.8
         }).addTo(map);
 
         const linhaVolta = L.polyline(coordsVolta, {
             color: '#e67e22',
             weight: 4,
-            opacity: 0.9,
-            dashArray: '4, 6'
+            opacity: 0.8,
+            dashArray: '8, 8' // Deixando a volta tracejada para diferenciar na sobreposição
         }).addTo(map);
 
+        // Adicionando setas direcionais dinâmicas usando o plugin Decorator
+        L.polylineDecorator(linhaIda, {
+            patterns: [
+                { offset: '10%', repeat: '120px', symbol: L.Symbol.arrowHead({ pixelSize: 12, polygon: false, pathOptions: { stroke: true, color: '#1a5276', weight: 3 } }) }
+            ]
+        }).addTo(map);
+
+        L.polylineDecorator(linhaVolta, {
+            patterns: [
+                { offset: '15%', repeat: '120px', symbol: L.Symbol.arrowHead({ pixelSize: 12, polygon: false, pathOptions: { stroke: true, color: '#b95e0c', weight: 3 } }) }
+            ]
+        }).addTo(map);
+
+        // Correção de sintaxe e renderização da legenda usando Template Literals
         const legend = L.control({ position: 'bottomright' });
         legend.onAdd = function () {
             const div = L.DomUtil.create('div', 'legend');
-            div.innerHTML += '<b>1ª Viagem de Paulo</b>
-';
-            div.innerHTML += '<i style="background: #2980b9"></i> Trajeto de Ida
-';
-            div.innerHTML += '<i style="background: #e67e22"></i> Trajeto de Volta
-';
+            div.innerHTML = `
+                <b>1ª Viagem de Paulo</b><br>
+                <i style="background: #2980b9"></i> Trajeto de Ida (Setas Azuis)<br>
+                <i style="background: #e67e22; border-top: 2px dashed #e67e22; height: 0; margin-top: 5px;"></i> Trajeto de Volta (Setas Laranjas)
+            `;
             return div;
         };
         legend.addTo(map);
 
+        // Ajuste de enquadramento
         const grupoRotas = L.featureGroup([linhaIda, linhaVolta]);
-        map.fitBounds(grupoRotas.getBounds(), { padding: [30, 30] });
+        map.fitBounds(grupoRotas.getBounds(), { padding: [40, 40] });
     </script>
 </body>
 </html>
