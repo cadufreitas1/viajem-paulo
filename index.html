@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1ª Viagem Missionária de Paulo - Rotas Separadas</title>
-    
-    <!-- CDN Oficial do Leaflet (CSS) -->
+
+    <!-- Links oficiais da CDN do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com" />
     
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         #map { width: 100vw; height: 100vh; background-color: #f4f4f4; }
         .popup-titulo { font-weight: bold; color: #2c3e50; margin-bottom: 5px; font-size: 14px; }
         .popup-desc { font-size: 12px; color: #555; line-height: 1.4; }
-        /* Caixa de legenda flutuante */
+        /* Estilização da legenda no mapa */
         .legend {
             background: white;
             padding: 10px;
@@ -30,19 +30,19 @@
 
     <div id="map"></div>
 
-    <!-- CDN Oficial do Leaflet (JavaScript) -->
+    <!-- Script oficial do Leaflet -->
     <script src="https://unpkg.com"></script>
     <script>
-        // 1. Inicializa o mapa focado na região geral do Mediterrâneo
+        // 1. Inicializa o mapa focado na região geral do Mediterrâneo Oriental
         const map = L.map('map').setView([36.5, 34.0], 6);
 
-        // 2. Camada de Satélite (Esri World Imagery)
+        // 2. Camada de Satélite estável (Esri World Imagery)
         L.tileLayer('https://arcgisonline.com{z}/{y}/{x}', {
             maxZoom: 18,
             attribution: 'Tiles &copy; Esri'
         }).addTo(map);
 
-        // Nomes de cidades, mares e fronteiras aplicados por cima do satélite
+        // Nomes de cidades e fronteiras aplicados por cima do satélite
         L.tileLayer('https://{s}://{z}/{x}/{y}.png', {
             maxZoom: 18
         }).addTo(map);
@@ -119,9 +119,9 @@
         };
         legend.addTo(map);
 
-        // 8. Auto-enquadramento automático (CORRIGIDO: Removido o erro de sintaxe do padding)
+        // 8. Auto-enquadramento automático corrigido e seguro
         const grupoRotas = L.featureGroup([linhaIda, linhaVolta]);
-        map.fitBounds(grupoRotas.getBounds(), { padding: [50, 50] });
+        map.fitBounds(grupoRotas.getBounds(), { padding: [40, 40] });
     </script>
 </body>
 </html>
