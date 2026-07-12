@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1ª Viagem Missionária de Paulo - Rotas Separadas</title>
- 
+
     <!-- Links oficiais da CDN do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     
@@ -32,7 +32,6 @@
             color: #555; 
             line-height: 1.4; 
         }
-        /* Estilização da legenda no mapa */
         .legend {
             background: white;
             padding: 10px;
@@ -52,22 +51,18 @@
     </style>
 </head>
 <body>
- 
+
     <div id="map"></div>
- 
-    <!-- Script oficial do Leaflet -->
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // 1. Inicializa o mapa focado na região geral do Mediterrâneo Oriental
         const map = L.map('map').setView([36.5, 34.0], 6);
- 
-        // 2. Camada de Satélite estável (Esri World Imagery)
+
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 18,
-            attribution: 'Tiles &copy; Esri'
+            attribution: 'Tiles © Esri'
         }).addTo(map);
- 
-        // 3. Dados das paradas (Ida)
+
         const rotaIda = [
             { name: "Antioquia da Síria", coords: [36.2021, 36.1601], desc: "<b>Início da Viagem:</b> Paulo e Barnabé são enviados pela igreja. (Atos 13:1-3)" },
             { name: "Selêucia", coords: [36.1178, 35.9261], desc: "<b>Porto de Partida:</b> Embarque rumo à ilha de Chipre. (Atos 13:4)" },
@@ -79,8 +74,7 @@
             { name: "Listra", coords: [37.5761, 32.2033], desc: "<b>Cura e Apedrejamento:</b> Paulo é apedrejado e quase morre. (Atos 14:8-20)" },
             { name: "Derbe", coords: [37.3483, 33.1764], desc: "<b>Fim da Ida:</b> Pregaram o evangelho e fizeram discípulos. (Atos 14:20-21)" }
         ];
- 
-        // Dados das paradas (Volta)
+
         const rotaVolta = [
             { name: "Derbe (Retorno)", coords: [37.3483, 33.1764], desc: "<b>Início do Retorno:</b> Decidem voltar fortalecendo os discípulos. (Atos 14:21)" },
             { name: "Listra (Visita)", coords: [37.5761, 32.2033], desc: "<b>Fortalecimento:</b> Encorajamento dos novos cristãos. (Atos 14:21-22)" },
@@ -90,15 +84,14 @@
             { name: "Atália", coords: [36.8841, 30.7056], desc: "<b>Porto de Retorno:</b> De onde navegaram de volta para a Síria. (Atos 14:25)" },
             { name: "Antioquia da Síria (Fim)", coords: [36.2021, 36.1601], desc: "<b>Fim da Viagem:</b> Relatório à igreja local. (Atos 14:26-28)" }
         ];
- 
-        // 4. Mapeamento e criação dos marcadores únicos
+
         const todasAsParadas = [...rotaIda, ...rotaVolta];
         const marcadoresCriados = {};
- 
+
         todasAsParadas.forEach(parada => {
             const chaveCoordenada = parada.coords.join(',');
             const conteudoPopup = `<div class="popup-titulo">${parada.name}</div><div class="popup-desc">${parada.desc}</div>`;
- 
+
             if (!marcadoresCriados[chaveCoordenada]) {
                 const novoMarcador = L.marker(parada.coords).addTo(map).bindPopup(conteudoPopup);
                 marcadoresCriados[chaveCoordenada] = novoMarcador;
@@ -108,40 +101,39 @@
                 marcadorExistente.setPopupContent(`${textoAnterior}<hr style="border: 0; border-top: 1px dashed #ccc; margin: 8px 0;">${conteudoPopup}`);
             }
         });
- 
-        // 5. Extração das coordenadas lineares
+
         const coordsIda = rotaIda.map(p => p.coords);
         const coordsVolta = rotaVolta.map(p => p.coords);
- 
-        // 6. Linhas de rota (Ida: Azul / Volta: Laranja)
+
         const linhaIda = L.polyline(coordsIda, {
             color: '#2980b9',
             weight: 4,
             opacity: 0.9,
             dashArray: '8, 8'
         }).addTo(map);
- 
+
         const linhaVolta = L.polyline(coordsVolta, {
             color: '#e67e22',
             weight: 4,
             opacity: 0.9,
             dashArray: '4, 6'
         }).addTo(map);
- 
-        // 7. Renderização da Legenda
+
         const legend = L.control({ position: 'bottomright' });
         legend.onAdd = function () {
             const div = L.DomUtil.create('div', 'legend');
-            div.innerHTML += '<b>1ª Viagem de Paulo</b><br>';
-            div.innerHTML += '<i style="background: #2980b9"></i> Trajeto de Ida<br>';
-            div.innerHTML += '<i style="background: #e67e22"></i> Trajeto de Volta<br>';
+            div.innerHTML += '<b>1ª Viagem de Paulo</b>
+';
+            div.innerHTML += '<i style="background: #2980b9"></i> Trajeto de Ida
+';
+            div.innerHTML += '<i style="background: #e67e22"></i> Trajeto de Volta
+';
             return div;
         };
         legend.addTo(map);
- 
-        // 8. Auto-enquadramento automático corrigido com margem de segurança fixa
+
         const grupoRotas = L.featureGroup([linhaIda, linhaVolta]);
-        map.fitBounds(grupoRotas.getBounds(), { padding: [50, 50] });
+        map.fitBounds(grupoRotas.getBounds(), { padding: [30, 30] });
     </script>
 </body>
 </html>
